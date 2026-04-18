@@ -1,14 +1,28 @@
 package server
 
-import "net/http"
+import (
+	"net/http"
+
+	"github.com/sweear/occlux/internal/config"
+)
 
 type Server struct {
 	httpServer *http.Server
 }
 
-func NewServer() *Server {
-	return &Server{
-		
+func NewServer(cfg *config.Config, handler http.Handler) *Server {
 
+	httpServer := &http.Server{
+		Addr:              cfg.Port,
+		Handler:           handler,
+		ReadTimeout:       cfg.ReadTimeout,
+		ReadHeaderTimeout: cfg.ReadHeaderTimeout,
+		WriteTimeout:      cfg.WriteTimeout,
+		IdleTimeout:       cfg.IdleTimeout,
+		MaxHeaderBytes:    cfg.MaxHeaderBytes,
+	}
+
+	return &Server{
+		httpServer: httpServer,
 	}
 }
