@@ -29,6 +29,10 @@ func (z *zapLogger) Error(msg string, args ...any) {
 	z.l.Error(msg, toFields(args)...)
 }
 
+func (z *zapLogger) Fatal(msg string, args ...any) {
+	z.l.Fatal(msg, toFields(args)...)
+}
+
 func (z *zapLogger) With(args ...any) Logger {
 	return &zapLogger{
 		l: z.l.With(toFields(args)...),
