@@ -32,7 +32,6 @@ func Load() *Config {
 	idleTimeout := parseDuration("OCCLUX_IDLE_TIMEOUT")
 	maxHeaderBytes := parseInt("OCCLUX_MAX_HEADER_BYTES")
 
-	logger.Info("config loaded successfully")
 	return &Config{
 		Host:              hostServer,
 		Port:              portServer,

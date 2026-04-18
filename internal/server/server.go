@@ -1,6 +1,7 @@
 package server
 
 import (
+	"context"
 	"net/http"
 
 	"github.com/sweear/occlux/internal/config"
@@ -13,7 +14,7 @@ type Server struct {
 func NewServer(cfg *config.Config, handler http.Handler) *Server {
 
 	httpServer := &http.Server{
-		Addr:              cfg.Port,
+		Addr:              ":" + cfg.Port,
 		Handler:           handler,
 		ReadTimeout:       cfg.ReadTimeout,
 		ReadHeaderTimeout: cfg.ReadHeaderTimeout,
@@ -25,4 +26,12 @@ func NewServer(cfg *config.Config, handler http.Handler) *Server {
 	return &Server{
 		httpServer: httpServer,
 	}
+}
+
+func (s *Server) Run() error {
+	return s.httpServer.ListenAndServe()
+}
+
+func (s *Server) Stop(ctx context.Context) error {
+	return s.httpServer.Shutdown(ctx)
 }
