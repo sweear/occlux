@@ -15,6 +15,16 @@ type Config struct {
 	WriteTimeout      time.Duration
 	IdleTimeout       time.Duration
 	MaxHeaderBytes    int
+
+	RedisURL          string
+	RedisPoolSize     int
+	RedisMinIdleConns int
+	RedisDialTimeout  time.Duration
+	RedisReadTimeout  time.Duration
+	RedisWriteTimeout time.Duration
+	RedisPoolTimeout  time.Duration
+	RedisMaxRetries   int
+	RedisProtocol     int
 }
 
 func Load() *Config {
@@ -32,6 +42,16 @@ func Load() *Config {
 	idleTimeout := parseDuration("OCCLUX_IDLE_TIMEOUT")
 	maxHeaderBytes := parseInt("OCCLUX_MAX_HEADER_BYTES")
 
+	redisURL := mustGet("OCCLUX_REDIS_URL")
+	redisPoolSize := parseInt("OCCLUX_REDIS_POOL_SIZE")
+	redisMinIdleConns := parseInt("OCCLUX_REDIS_MIN_IDLE_CONNS")
+	redisDialTimeout := parseDuration("OCCLUX_REDIS_DIAL_TIMEOUT")
+	redisReadTimeout := parseDuration("OCCLUX_REDIS_READ_TIMEOUT")
+	redisWriteTimeout := parseDuration("OCCLUX_REDIS_WRITE_TIMEOUT")
+	redisPoolTimeout := parseDuration("OCCLUX_REDIS_POOL_TIMEOUT")
+	redisMaxRetries := parseInt("OCCLUX_REDIS_MAX_RETRIES")
+	redisProtocol := parseInt("OCCLUX_REDIS_PROTOCOL")
+
 	return &Config{
 		Host:              hostServer,
 		Port:              portServer,
@@ -40,5 +60,15 @@ func Load() *Config {
 		WriteTimeout:      writeTimeout,
 		IdleTimeout:       idleTimeout,
 		MaxHeaderBytes:    maxHeaderBytes,
+
+		RedisURL:          redisURL,
+		RedisPoolSize:     redisPoolSize,
+		RedisMinIdleConns: redisMinIdleConns,
+		RedisDialTimeout:  redisDialTimeout,
+		RedisReadTimeout:  redisReadTimeout,
+		RedisWriteTimeout: redisWriteTimeout,
+		RedisPoolTimeout:  redisPoolTimeout,
+		RedisMaxRetries:   redisMaxRetries,
+		RedisProtocol:     redisProtocol,
 	}
 }

@@ -27,9 +27,11 @@ func NewApp() *App {
 	cfg := config.Load()
 	logger.Info("config loaded", "addr", ":"+cfg.Port)
 
-	redisStorage := secretStorage.NewRedisStorage()
+	redisStorage := secretStorage.NewRedisStorage(cfg)
+	logger.Info("redis connected")
 
 	secretService := service.NewSecretService(redisStorage)
+	logger.Info("secret service initialized")
 
 	secretHandler := handler.NewSecretHandler(secretService)
 	logger.Info("secret handler initialized")
