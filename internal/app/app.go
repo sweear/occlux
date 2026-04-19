@@ -14,6 +14,7 @@ import (
 	"github.com/sweear/occlux/internal/logger"
 	"github.com/sweear/occlux/internal/server"
 	"github.com/sweear/occlux/internal/service"
+	secretStorage "github.com/sweear/occlux/internal/storage/secret"
 )
 
 type App struct {
@@ -26,7 +27,9 @@ func NewApp() *App {
 	cfg := config.Load()
 	logger.Info("config loaded", "addr", ":"+cfg.Port)
 
-	secretService := service.NewSecretService()
+	redisStorage := secretStorage.NewRedisStorage()
+
+	secretService := service.NewSecretService(redisStorage)
 
 	secretHandler := handler.NewSecretHandler(secretService)
 	logger.Info("secret handler initialized")
