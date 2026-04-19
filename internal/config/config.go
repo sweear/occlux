@@ -39,6 +39,6 @@ func Load() *Config {
 		ReadHeaderTimeout: readHeaderTimeout,
 		WriteTimeout:      writeTimeout,
 		IdleTimeout:       idleTimeout,
-		MaxHeaderBytes: maxHeaderBytes,
+		MaxHeaderBytes:    maxHeaderBytes,
 	}
 }

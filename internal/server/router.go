@@ -3,6 +3,7 @@ package server
 import (
 	"net/http"
 
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/sweear/occlux/internal/handler"
 	"github.com/sweear/occlux/internal/logger"
@@ -14,6 +15,7 @@ func NewRouter(secretHandler *handler.SecretHandler) http.Handler {
 
 	router := gin.New()
 
+	router.Use(cors.Default()) // заменить потом на нужные корсы ток моего фронта
 	router.Use(gin.Recovery())
 	router.Use(middleware.Logger())
 

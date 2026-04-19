@@ -13,6 +13,7 @@ import (
 	"github.com/sweear/occlux/internal/handler"
 	"github.com/sweear/occlux/internal/logger"
 	"github.com/sweear/occlux/internal/server"
+	"github.com/sweear/occlux/internal/service"
 )
 
 type App struct {
@@ -25,7 +26,9 @@ func NewApp() *App {
 	cfg := config.Load()
 	logger.Info("config loaded", "addr", ":"+cfg.Port)
 
-	secretHandler := handler.NewSecretHandler()
+	secretService := service.NewSecretService()
+
+	secretHandler := handler.NewSecretHandler(secretService)
 	logger.Info("secret handler initialized")
 
 	router := server.NewRouter(secretHandler)
