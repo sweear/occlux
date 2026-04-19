@@ -2,12 +2,15 @@ package service
 
 import (
 	"context"
+	"errors"
 	"time"
 
 	"github.com/google/uuid"
 	"github.com/sweear/occlux/internal/model"
 	secretStorage "github.com/sweear/occlux/internal/storage/secret"
 )
+
+var ErrSecretNotFound = errors.New("secret not found")
 
 type CreateSecretParams struct {
 	EncryptedData string
@@ -50,6 +53,10 @@ func (s *SecretService) GetByID(ctx context.Context, id string) (*model.Secret, 
 	secret, err := s.secretStorage.GetAndDecrement(ctx, id)
 	if err != nil {
 		return nil, err
+	}
+
+	if secret == nil {
+		return nil, ErrSecretNotFound
 	}
 
 	return secret, nil

@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"errors"
 	"net/http"
 	"time"
 
@@ -72,6 +73,13 @@ func (s *SecretHandler) Create(c *gin.Context) {
 
 func (s *SecretHandler) GetByID(c *gin.Context) {
 	secret, err := s.service.GetByID(c.Request.Context(), c.Param("id"))
+	if errors.Is(err, service.ErrSecretNotFound) {
+		c.JSON(http.StatusNotFound, errorResponse{
+			Success: false,
+			Error:   "secret not found or expired",
+		})
+		return
+	}
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, errorResponse{
 			Success: false,
