@@ -36,7 +36,10 @@ func NewApp() *App {
 	secretHandler := handler.NewSecretHandler(secretService)
 	logger.Info("secret handler initialized")
 
-	router := server.NewRouter(secretHandler)
+	healthHandler := handler.NewHealthHandler(redisStorage)
+	logger.Info("health handler initialized")
+
+	router := server.NewRouter(secretHandler, healthHandler)
 	logger.Info("router created")
 
 	server := server.NewServer(cfg, router)

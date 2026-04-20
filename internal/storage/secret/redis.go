@@ -80,3 +80,7 @@ func (r *redisStorage) GetAndDecrement(ctx context.Context, id string) (*model.S
 		EncryptedData: encryptedData,
 	}, nil
 }
+
+func (r *redisStorage) Ping(ctx context.Context) error {
+	return r.client.Ping(ctx).Err()
+}

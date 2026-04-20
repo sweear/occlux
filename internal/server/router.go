@@ -10,7 +10,9 @@ import (
 	"github.com/sweear/occlux/internal/middleware"
 )
 
-func NewRouter(secretHandler *handler.SecretHandler) http.Handler {
+func NewRouter(secretHandler *handler.SecretHandler,
+	healthHandler *handler.HealthHandler) http.Handler {
+
 	gin.SetMode(gin.ReleaseMode)
 
 	router := gin.New()
@@ -22,10 +24,12 @@ func NewRouter(secretHandler *handler.SecretHandler) http.Handler {
 	api := router.Group("/api/v1")
 	registerSecretRoutes(api, secretHandler)
 
-	logger.Info("routes registered",
-		"POST", "/api/v1/secrets",
-		"GET", "/api/v1/secrets/:id",
-	)
+	health := router.Group("/health")
+	registerHealthRoutes(health, healthHandler)
+
+	for _, route := range router.Routes() {
+		logger.Info("route registered", "method", route.Method, "path", route.Path)
+	}
 
 	return router
 }
@@ -36,4 +40,8 @@ func registerSecretRoutes(api *gin.RouterGroup, h *handler.SecretHandler) {
 		secrets.POST("", h.Create)
 		secrets.GET("/:id", h.GetByID)
 	}
+}
+
+func registerHealthRoutes(health *gin.RouterGroup, h *handler.HealthHandler) {
+	health.GET("", h.Health)
 }

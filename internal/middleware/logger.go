@@ -10,6 +10,11 @@ import (
 
 func Logger() gin.HandlerFunc {
 	return func(c *gin.Context) {
+		if c.Request.URL.Path == "/health" {
+			c.Next()
+			return
+		}
+
 		start := time.Now()
 		requestID := uuid.New().String()
 
