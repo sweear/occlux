@@ -34,3 +34,9 @@ go.work.sum
 # Frontend build
 internal/app/dist/*
 !internal/app/dist/.gitkeep
+
+# Frontend dependencies
+web/node_modules/
+
+# Binary
+bin/

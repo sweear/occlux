@@ -5,7 +5,6 @@
 import { useState, useRef, useEffect } from 'react'
 import { Outlet, useNavigate } from 'react-router-dom'
 import { useLang } from '@/hooks/useLang'
-import { t } from '@/utils/i18n'
 import type { Lang } from '@/types'
 
 export function Layout() {

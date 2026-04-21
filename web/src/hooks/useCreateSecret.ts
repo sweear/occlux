@@ -53,7 +53,7 @@ async function deriveKey(password: string, salt: Uint8Array): Promise<CryptoKey>
     'raw', new TextEncoder().encode(password), 'PBKDF2', false, ['deriveKey']
   )
   return crypto.subtle.deriveKey(
-    { name: 'PBKDF2', salt, iterations: PBKDF2_IT, hash: 'SHA-256' },
+    { name: 'PBKDF2', salt: salt.buffer as ArrayBuffer, iterations: PBKDF2_IT, hash: 'SHA-256' },
     pwKey,
     { name: ALGO, length: 256 },
     false,

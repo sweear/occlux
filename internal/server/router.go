@@ -53,18 +53,20 @@ func registerHealthRoutes(health *gin.RouterGroup, h *handler.HealthHandler) {
 }
 
 func registerStaticFiles(router *gin.Engine, staticFiles embed.FS) {
-	sub, _ := fs.Sub(staticFiles, "dist")
+    sub, _ := fs.Sub(staticFiles, "dist")
 
-	fileServer := http.FileServer(http.FS(sub))
+    indexHTML, _ := fs.ReadFile(sub, "index.html")
 
-	router.NoRoute(func(c *gin.Context) {
-		path := c.Request.URL.Path
+    fileServer := http.FileServer(http.FS(sub))
 
-		if strings.HasPrefix(path, "/assets/") {
-			fileServer.ServeHTTP(c.Writer, c.Request)
-			return
-		}
+    router.NoRoute(func(c *gin.Context) {
+        path := c.Request.URL.Path
 
-		c.FileFromFS("index.html", http.FS(sub))
-	})
+        if strings.HasPrefix(path, "/assets/") {
+            fileServer.ServeHTTP(c.Writer, c.Request)
+            return
+        }
+
+        c.Data(http.StatusOK, "text/html; charset=utf-8", indexHTML)
+    })
 }

@@ -1,6 +1,7 @@
 package middleware
 
 import (
+	"strings"
 	"time"
 
 	"github.com/gin-gonic/gin"
@@ -10,7 +11,9 @@ import (
 
 func Logger() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		if c.Request.URL.Path == "/health" {
+		path := c.Request.URL.Path
+
+		if !strings.HasPrefix(path, "/api/") {
 			c.Next()
 			return
 		}
