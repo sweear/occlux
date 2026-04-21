@@ -33,4 +33,4 @@ go.work.sum
 
 # Frontend build
 internal/app/dist/*
-!internal/app/dist/index.html
+!internal/app/dist/.gitkeep
