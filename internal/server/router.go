@@ -1,7 +1,10 @@
 package server
 
 import (
+	"embed"
+	"io/fs"
 	"net/http"
+	"strings"
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
@@ -11,7 +14,8 @@ import (
 )
 
 func NewRouter(secretHandler *handler.SecretHandler,
-	healthHandler *handler.HealthHandler) http.Handler {
+	healthHandler *handler.HealthHandler,
+	staticFiles embed.FS) http.Handler {
 
 	gin.SetMode(gin.ReleaseMode)
 
@@ -26,6 +30,8 @@ func NewRouter(secretHandler *handler.SecretHandler,
 
 	health := router.Group("/health")
 	registerHealthRoutes(health, healthHandler)
+
+	registerStaticFiles(router, staticFiles)
 
 	for _, route := range router.Routes() {
 		logger.Info("route registered", "method", route.Method, "path", route.Path)
@@ -44,4 +50,21 @@ func registerSecretRoutes(api *gin.RouterGroup, h *handler.SecretHandler) {
 
 func registerHealthRoutes(health *gin.RouterGroup, h *handler.HealthHandler) {
 	health.GET("", h.Health)
+}
+
+func registerStaticFiles(router *gin.Engine, staticFiles embed.FS) {
+	sub, _ := fs.Sub(staticFiles, "dist")
+
+	fileServer := http.FileServer(http.FS(sub))
+
+	router.NoRoute(func(c *gin.Context) {
+		path := c.Request.URL.Path
+
+		if strings.HasPrefix(path, "/assets/") {
+			fileServer.ServeHTTP(c.Writer, c.Request)
+			return
+		}
+
+		c.FileFromFS("index.html", http.FS(sub))
+	})
 }

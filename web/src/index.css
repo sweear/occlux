@@ -1,0 +1,49 @@
+/* OCCLUX — purple/violet dark, точь-в-точь референс */
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+:root {
+  --bg:   #05050f;
+  --s1:   #0b0b1e;
+  --s2:   #101028;
+  --v:    #7c6aff;
+  --v2:   #9d8fff;
+  --v3:   #c4baff;
+  --vd:   rgba(124,106,255,0.07);
+  --vm:   rgba(124,106,255,0.14);
+  --vb:   rgba(124,106,255,0.28);
+  --vgl:  rgba(124,106,255,0.22);
+  --amber:#f59e0b;
+  --amb-d:rgba(245,158,11,0.10);
+  --amb-b:rgba(245,158,11,0.28);
+  --red:  #f87171;
+  --red-d:rgba(248,113,113,0.10);
+  --red-b:rgba(248,113,113,0.28);
+  --green:#34d399;
+  --t1:   #eeeaff;
+  --t2:   #7c78a8;
+  --t3:   #3d3870;
+  --t4:   #191740;
+  --b1:   #12113a;
+  --b2:   #1c1b4a;
+  --b3:   #2a2870;
+  --font: 'Outfit', system-ui, sans-serif;
+  --mono: 'IBM Plex Mono', monospace;
+  --cw:   1160px;
+  --tr:   0.13s ease;
+}
+html { font-size:16px; -webkit-font-smoothing:antialiased; }
+body { background:var(--bg); font-family:var(--font); color:var(--t1); min-height:100vh; overflow-x:hidden; }
+.blob { position:fixed; border-radius:50%; pointer-events:none; z-index:0; }
+.ba { width:680px;height:680px; background:radial-gradient(circle,rgba(124,106,255,0.11) 0%,transparent 65%); top:-220px;right:-140px; animation:drift 14s ease-in-out infinite alternate; }
+.bb { width:520px;height:520px; background:radial-gradient(circle,rgba(168,85,247,0.07) 0%,transparent 65%); bottom:-140px;left:-100px; animation:drift 10s ease-in-out infinite alternate-reverse; }
+@keyframes drift { from{transform:translate(0,0) scale(1);} to{transform:translate(28px,-22px) scale(1.07);} }
+#root { position:relative;z-index:1;min-height:100vh;display:flex;flex-direction:column; }
+@keyframes fadeUp { from{opacity:0;transform:translateY(14px);} to{opacity:1;transform:translateY(0);} }
+@keyframes spin   { to{transform:rotate(360deg);} }
+@keyframes pulse  { 0%,100%{box-shadow:0 0 0 0 rgba(124,106,255,0);} 60%{box-shadow:0 0 0 8px rgba(124,106,255,0.12);} }
+input[type='number']::-webkit-inner-spin-button,
+input[type='number']::-webkit-outer-spin-button { -webkit-appearance:none; }
+input[type='number'] { -moz-appearance:textfield; appearance:textfield; }
+::-webkit-scrollbar { width:4px; }
+::-webkit-scrollbar-track { background:var(--bg); }
+::-webkit-scrollbar-thumb { background:var(--b2); border-radius:4px; }
+a { color:var(--v2); text-decoration:none; }

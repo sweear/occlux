@@ -2,6 +2,7 @@ package app
 
 import (
 	"context"
+	"embed"
 	"errors"
 	"net/http"
 	"os"
@@ -16,6 +17,9 @@ import (
 	"github.com/sweear/occlux/internal/service"
 	secretStorage "github.com/sweear/occlux/internal/storage/secret"
 )
+
+//go:embed dist/*
+var staticFiles embed.FS
 
 type App struct {
 	server *server.Server
@@ -39,7 +43,7 @@ func NewApp() *App {
 	healthHandler := handler.NewHealthHandler(redisStorage)
 	logger.Info("health handler initialized")
 
-	router := server.NewRouter(secretHandler, healthHandler)
+	router := server.NewRouter(secretHandler, healthHandler, staticFiles)
 	logger.Info("router created")
 
 	server := server.NewServer(cfg, router)
