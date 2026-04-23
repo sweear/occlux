@@ -6,7 +6,6 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/sweear/occlux/internal/handler"
 	"github.com/sweear/occlux/internal/logger"
@@ -21,9 +20,9 @@ func NewRouter(secretHandler *handler.SecretHandler,
 
 	router := gin.New()
 
-	router.Use(cors.Default()) // заменить потом на нужные корсы ток моего фронта
 	router.Use(gin.Recovery())
 	router.Use(middleware.Logger())
+	router.Use(middleware.Security())
 
 	api := router.Group("/api/v1")
 	registerSecretRoutes(api, secretHandler)
@@ -53,20 +52,20 @@ func registerHealthRoutes(health *gin.RouterGroup, h *handler.HealthHandler) {
 }
 
 func registerStaticFiles(router *gin.Engine, staticFiles embed.FS) {
-    sub, _ := fs.Sub(staticFiles, "dist")
+	sub, _ := fs.Sub(staticFiles, "dist")
 
-    indexHTML, _ := fs.ReadFile(sub, "index.html")
+	indexHTML, _ := fs.ReadFile(sub, "index.html")
 
-    fileServer := http.FileServer(http.FS(sub))
+	fileServer := http.FileServer(http.FS(sub))
 
-    router.NoRoute(func(c *gin.Context) {
-        path := c.Request.URL.Path
+	router.NoRoute(func(c *gin.Context) {
+		path := c.Request.URL.Path
 
-        if strings.HasPrefix(path, "/assets/") {
-            fileServer.ServeHTTP(c.Writer, c.Request)
-            return
-        }
+		if strings.HasPrefix(path, "/assets/") {
+			fileServer.ServeHTTP(c.Writer, c.Request)
+			return
+		}
 
-        c.Data(http.StatusOK, "text/html; charset=utf-8", indexHTML)
-    })
+		c.Data(http.StatusOK, "text/html; charset=utf-8", indexHTML)
+	})
 }
