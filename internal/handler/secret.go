@@ -42,6 +42,8 @@ func NewSecretHandler(service *service.SecretService) *SecretHandler {
 }
 
 func (s *SecretHandler) Create(c *gin.Context) {
+	c.Request.Body = http.MaxBytesReader(c.Writer, c.Request.Body, 1<<15)
+
 	var req createSecretRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
 		c.JSON(http.StatusBadRequest, errorResponse{
