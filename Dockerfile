@@ -11,9 +11,9 @@ COPY go.mod go.sum .
 RUN apk add --no-cache git && GOPROXY=direct go mod download
 COPY . .
 COPY --from=frontend-builder /app/internal/app/dist ./internal/app/dist
-RUN CGO_ENABLED=0 GOOS=linux go build -ldflags="-w -s" -o server ./cmd/server
+RUN CGO_ENABLED=0 GOOS=linux go build -ldflags="-w -s" -o occlux-server ./cmd/server
 
 FROM scratch
-COPY --from=backend-builder /app/server /server
+COPY --from=backend-builder /app/occlux-server /occlux-server
 EXPOSE 8080
-ENTRYPOINT ["/server"]
+ENTRYPOINT ["/occlux-server"]
