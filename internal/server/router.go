@@ -65,6 +65,11 @@ func registerStaticFiles(router *gin.Engine, staticFiles embed.FS) {
 	router.NoRoute(func(c *gin.Context) {
 		path := c.Request.URL.Path
 
+		if strings.HasPrefix(path, "/api/") {
+			c.JSON(http.StatusNotFound, gin.H{"error": "not found"})
+			return
+		}
+
 		if strings.HasPrefix(path, "/assets/") {
 			fileServer.ServeHTTP(c.Writer, c.Request)
 			return
