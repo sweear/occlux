@@ -11,7 +11,7 @@ COPY go.mod go.sum .
 RUN apk add --no-cache git && GOPROXY=direct go mod download
 COPY . .
 COPY --from=frontend-builder /app/internal/app/dist ./internal/app/dist
-RUN CGO_ENABLED=0 GOOS=linux go build -ldflags="-w -s" -o occlux-server ./cmd/server
+RUN CGO_ENABLED=0 GOOS=linux go build -ldflags="-w -s" -o occlux-server ./cmd/occlux-server
 
 FROM scratch
 COPY --from=backend-builder /app/occlux-server /occlux-server
