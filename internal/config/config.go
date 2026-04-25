@@ -25,6 +25,12 @@ type Config struct {
 	RedisPoolTimeout  time.Duration
 	RedisMaxRetries   int
 	RedisProtocol     int
+
+	RedisSecretDB  int
+	RedisLimiterDB int
+
+	RateLimitSecretCreate string
+	RateLimitSecretGet    string
 }
 
 func Load() *Config {
@@ -52,6 +58,12 @@ func Load() *Config {
 	redisMaxRetries := parseInt("OCCLUX_REDIS_MAX_RETRIES")
 	redisProtocol := parseInt("OCCLUX_REDIS_PROTOCOL")
 
+	redisSecretDB := parseInt("OCCLUX_REDIS_SECRET_DB")
+	redisLimiterDB := parseInt("OCCLUX_REDIS_LIMITER_DB")
+
+	rateLimitSecretCreate := mustGet("OCCLUX_RATE_LIMIT_SECRET_CREATE")
+	rateLimitSecretGet := mustGet("OCCLUX_RATE_LIMIT_SECRET_GET")
+
 	return &Config{
 		Host:              hostServer,
 		Port:              portServer,
@@ -70,5 +82,11 @@ func Load() *Config {
 		RedisPoolTimeout:  redisPoolTimeout,
 		RedisMaxRetries:   redisMaxRetries,
 		RedisProtocol:     redisProtocol,
+
+		RedisSecretDB:  redisSecretDB,
+		RedisLimiterDB: redisLimiterDB,
+
+		RateLimitSecretCreate: rateLimitSecretCreate,
+		RateLimitSecretGet:    rateLimitSecretGet,
 	}
 }

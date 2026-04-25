@@ -14,7 +14,9 @@ import (
 
 func NewRouter(secretHandler *handler.SecretHandler,
 	healthHandler *handler.HealthHandler,
-	staticFiles embed.FS) http.Handler {
+	staticFiles embed.FS,
+	createLimiter gin.HandlerFunc,
+	getLimiter gin.HandlerFunc) http.Handler {
 
 	gin.SetMode(gin.ReleaseMode)
 
@@ -25,7 +27,7 @@ func NewRouter(secretHandler *handler.SecretHandler,
 	router.Use(middleware.Security())
 
 	api := router.Group("/api/v1")
-	registerSecretRoutes(api, secretHandler)
+	registerSecretRoutes(api, secretHandler, createLimiter, getLimiter)
 
 	health := router.Group("/health")
 	registerHealthRoutes(health, healthHandler)
@@ -39,11 +41,13 @@ func NewRouter(secretHandler *handler.SecretHandler,
 	return router
 }
 
-func registerSecretRoutes(api *gin.RouterGroup, h *handler.SecretHandler) {
+func registerSecretRoutes(api *gin.RouterGroup, h *handler.SecretHandler,
+	createLimiter, getLimiter gin.HandlerFunc) {
+
 	secrets := api.Group("/secrets")
 	{
-		secrets.POST("", h.Create)
-		secrets.GET("/:id", h.GetByID)
+		secrets.POST("", createLimiter, h.Create)
+		secrets.GET("/:id", getLimiter, h.GetByID)
 	}
 }
 

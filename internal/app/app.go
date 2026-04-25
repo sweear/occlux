@@ -13,6 +13,8 @@ import (
 	"github.com/sweear/occlux/internal/config"
 	"github.com/sweear/occlux/internal/handler"
 	"github.com/sweear/occlux/internal/logger"
+	"github.com/sweear/occlux/internal/middleware"
+	"github.com/sweear/occlux/internal/redis"
 	"github.com/sweear/occlux/internal/server"
 	"github.com/sweear/occlux/internal/service"
 	secretStorage "github.com/sweear/occlux/internal/storage/secret"
@@ -31,19 +33,29 @@ func NewApp() *App {
 	cfg := config.Load()
 	logger.Info("config loaded", "addr", ":"+cfg.Port)
 
-	redisStorage := secretStorage.NewRedisStorage(cfg)
-	logger.Info("redis connected")
+	redisSecretClient := redis.NewRedisClient(cfg, cfg.RedisSecretDB)
+	logger.Info("redis secret client connected")
 
-	secretService := service.NewSecretService(redisStorage)
+	redisLimiterClient := redis.NewRedisClient(cfg, cfg.RedisLimiterDB)
+	logger.Info("redis limiter client connected")
+
+	redisSecretStorage := secretStorage.NewRedisStorage(redisSecretClient)
+	logger.Info("secret storage initialized")
+
+	secretService := service.NewSecretService(redisSecretStorage)
 	logger.Info("secret service initialized")
 
 	secretHandler := handler.NewSecretHandler(secretService)
 	logger.Info("secret handler initialized")
 
-	healthHandler := handler.NewHealthHandler(redisStorage)
+	healthHandler := handler.NewHealthHandler(redisSecretStorage)
 	logger.Info("health handler initialized")
 
-	router := server.NewRouter(secretHandler, healthHandler, staticFiles)
+	createLimiter := middleware.RateLimit(redisLimiterClient, cfg.RateLimitSecretCreate)
+	getLimiter := middleware.RateLimit(redisLimiterClient, cfg.RateLimitSecretGet)
+	logger.Info("rate limiters initialized")
+
+	router := server.NewRouter(secretHandler, healthHandler, staticFiles, createLimiter, getLimiter)
 	logger.Info("router created")
 
 	server := server.NewServer(cfg, router)
