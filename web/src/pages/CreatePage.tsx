@@ -149,7 +149,7 @@ export function CreatePage() {
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 360px), 1fr))', gap: 'clamp(32px,5vw,80px)', alignItems: 'start' }}>
 
             {/* Left */}
-            <div style={{ position: 'sticky', top: '80px', animation: 'fadeUp 0.25s ease' }}>
+            <div style={{ animation: 'fadeUp 0.25s ease' }}>
               <HeroText lang={lang} />
               <div style={{ marginTop: '36px', display: 'flex', flexDirection: 'column', gap: '16px' }}>
                 {[
@@ -198,7 +198,7 @@ export function CreatePage() {
               </div>
 
               <div style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid var(--b1)', borderRadius: '14px', padding: '16px', marginBottom: '12px' }}>
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr auto', gap: '16px', alignItems: 'start' }}>
+                <div className="settings-grid">
                   <div>
                     <FLabel icon="fa-hourglass-half">{isRu ? 'Удалить через' : 'Expires after'}</FLabel>
                     <div style={{ display: 'flex', flexWrap: 'wrap', gap: '4px', marginBottom: '8px' }}>
