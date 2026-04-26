@@ -1,20 +1,9 @@
-/**
- * api/client.ts
- *
- * Типы и имена полей строго совпадают с Go хендлером:
- *   createSecretRequest  → encryptedData, maxViews, ttlMinutes
- *   createSecretResponse → success, id, expiresAt
- *   getSecretResponse    → success, encryptedData
- */
-
 const BASE = '/api/v1'
 
-// ─── Типы (зеркало Go структур) ───────────────────────────────
-
 export interface CreateSecretRequest {
-  encryptedData: string   // json:"encryptedData"
-  maxViews: number        // json:"maxViews"
-  ttlMinutes: number      // json:"ttlMinutes"
+  encryptedData: string
+  maxViews: number
+  ttlMinutes: number
 }
 
 export interface CreateSecretResponse {

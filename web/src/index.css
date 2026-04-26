@@ -1,4 +1,4 @@
-/* OCCLUX — purple/violet dark, точь-в-точь референс */
+/* OCCLUX — purple/violet dark */
 *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
 :root {
   --bg:   #05050f;
@@ -47,3 +47,12 @@ input[type='number'] { -moz-appearance:textfield; appearance:textfield; }
 ::-webkit-scrollbar-track { background:var(--bg); }
 ::-webkit-scrollbar-thumb { background:var(--b2); border-radius:4px; }
 a { color:var(--v2); text-decoration:none; }
+
+.cards-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+@media (max-width: 720px) {
+  .cards-grid { grid-template-columns: 1fr; }
+}

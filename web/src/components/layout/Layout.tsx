@@ -1,10 +1,6 @@
-/**
- * Layout.tsx — sticky header как в референсе, с иконкой-молнией вместо лого
- * + переключатель языка справа вместо строки "encrypted · zero-knowledge..."
- */
 import { useState, useRef, useEffect } from 'react'
 import { Outlet, useNavigate } from 'react-router-dom'
-import { useLang } from '@/hooks/useLang'
+import { useLang } from '@/hooks/LangContext'
 import type { Lang } from '@/types'
 
 export function Layout() {

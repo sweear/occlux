@@ -3,10 +3,10 @@
 build:
 	cd web && npm install && npm run build
 	touch internal/app/dist/.gitkeep
-	go build -o bin/occlux ./cmd/server
+	go build -o bin/occlux-server ./cmd/occlux-server
 
-run: build
-	./bin/occlux
+run:
+	./bin/occlux-server
 
 dev:
-	go run ./cmd/server
+	go run ./cmd/occlux-server
