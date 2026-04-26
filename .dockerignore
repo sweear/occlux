@@ -1,14 +1,12 @@
 bin/
-
 internal/app/dist/
-
 web/node_modules/
-
-# git
 .git/
-
 .env
 .env.*
-
 Makefile
 README.md
+*.md
+.gitignore
+.vscode/
+.idea/
